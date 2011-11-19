@@ -8,15 +8,19 @@ import static org.hamcrest.Matchers.is;
 import java.util.Arrays;
 
 import org.bgprocess.refactoringtofunctional.handson.StockKeeping.StockChange;
-import org.junit.Test;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
 
-
+@RunWith(Theories.class)
 public class StockKeepingTest {
     private static final StockChange[] NO_CHANGES = new StockChange[0];
 
-    private static final StockChangeScenario[] SCENARIOS = {
+    @DataPoints
+    public static final StockChangeScenario[] SCENARIOS = {
         theCostOf(0).is(0).given(NO_CHANGES),
         theCostOf(0).is(0).given(changeOf(1, 1)),
         
@@ -32,13 +36,11 @@ public class StockKeepingTest {
         theCostOf(1).is(2).given(changeOf(1, 1), changeOf(1, 1), changeOf(-2, 3), changeOf(1, 2)),
     };
     
-    @Test
-    public void calculates_the_cost_of_remaining_stock() {
-        for (StockChangeScenario scenario : SCENARIOS) {
-            assertThat(scenario.toString(),
-                    new StockKeeping(Lists.newArrayList(scenario.changes)).costOf(scenario.number),
-                    is(scenario.cost));
-        }
+    @Theory
+    public void calculates_the_cost_of_remaining_stock(StockChangeScenario scenario) {
+        assertThat(scenario.toString(),
+                new StockKeeping(Lists.newArrayList(scenario.changes)).costOf(scenario.number),
+                is(scenario.cost));
     }
     
     public static class StockChangeScenario {

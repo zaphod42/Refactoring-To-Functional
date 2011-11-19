@@ -1,5 +1,6 @@
 package org.bgprocess.refactoringtofunctional;
 
+import static org.bgprocess.refactoringtofunctional.Branching.add;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -10,12 +11,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 
 public class Sequencing {
-    
-    /**
-     * A contrived example of sequencing operations. 
-     */
     @Test public void
     implicit_sequence() {
         Integer value = 1;
@@ -29,15 +27,9 @@ public class Sequencing {
     
     @Test public void
     explicit_sequences() {
-        Function<Integer, Integer> addOne = new Function<Integer, Integer>() {
-            @Override public Integer apply(Integer input) { return input + 1; }
-        };
-        Function<Integer, String> toString = new Function<Integer, String>() {
-            @Override public String apply(Integer input) { return input.toString(); }
-        };
-        Function<Integer, Integer> minusOne = new Function<Integer, Integer>() {
-            @Override public Integer apply(Integer input) { return input - 1; }
-        };
+        Function<Integer, Integer> addOne = add(1);
+        Function<Object, String> toString = Functions.toStringFunction();
+        Function<Integer, Integer> minusOne = add(-1);
         Function<String, Integer> fromString = new Function<String, Integer>() {
             @Override public Integer apply(String input) { return Integer.parseInt(input); }
         };
@@ -49,7 +41,6 @@ public class Sequencing {
     }
     
     public static class Sequence<IN, OUT> implements Function<IN, OUT> {
-
         @SuppressWarnings("rawtypes")
         private final List<Function> steps;
         
@@ -62,8 +53,13 @@ public class Sequencing {
             this.steps.add(step);
         }
         
-        public static <IN, OUT> Sequence<IN, OUT> from(Function<IN, OUT> step) { return new Sequence<IN, OUT>(step); }
-        public <NEW_OUT> Sequence<IN, NEW_OUT> andThen(Function<OUT, NEW_OUT> step) { return new Sequence<IN, NEW_OUT>(step, this); }
+        public static <IN, OUT> Sequence<IN, OUT> from(Function<IN, OUT> step) { 
+            return new Sequence<IN, OUT>(step); 
+        }
+        
+        public <NEW_OUT> Sequence<IN, NEW_OUT> andThen(Function<? super OUT, NEW_OUT> step) { 
+            return new Sequence<IN, NEW_OUT>(step, this); 
+        }
         
         @SuppressWarnings({ "rawtypes", "unchecked" })
         @Override
@@ -74,6 +70,5 @@ public class Sequencing {
             }
             return (OUT) result;
         }
-        
     }
 }
