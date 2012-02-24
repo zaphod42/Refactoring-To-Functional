@@ -4,6 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="guava-10.0.1.jar"/>
 	<classpathentry kind="lib" path="hamcrest-all-1.2.jar"/>
+	<classpathentry kind="lib" path="jmock-2.5.1.jar"/>
+	<classpathentry kind="lib" path="jmock-junit4-2.5.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<accessrules>
 			<accessrule kind="nonaccessible" pattern="**/hamcrest/**"/>

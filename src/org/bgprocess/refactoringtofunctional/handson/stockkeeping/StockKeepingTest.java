@@ -1,13 +1,13 @@
-package org.bgprocess.refactoringtofunctional.handson;
+package org.bgprocess.refactoringtofunctional.handson.stockkeeping;
 
-import static org.bgprocess.refactoringtofunctional.handson.StockKeeping.StockChange.changeOf;
-import static org.bgprocess.refactoringtofunctional.handson.StockKeepingTest.StockChangeScenario.theCostOf;
+import static org.bgprocess.refactoringtofunctional.handson.stockkeeping.StockKeeping.StockChange.changeOf;
+import static org.bgprocess.refactoringtofunctional.handson.stockkeeping.StockKeepingTest.StockChangeScenario.theCostOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 
-import org.bgprocess.refactoringtofunctional.handson.StockKeeping.StockChange;
+import org.bgprocess.refactoringtofunctional.handson.stockkeeping.StockKeeping.StockChange;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;

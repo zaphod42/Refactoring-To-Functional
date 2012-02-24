@@ -1,4 +1,4 @@
-package org.bgprocess.refactoringtofunctional.handson;
+package org.bgprocess.refactoringtofunctional.handson.stockkeeping;
 
 import java.util.Deque;
 import java.util.List;
