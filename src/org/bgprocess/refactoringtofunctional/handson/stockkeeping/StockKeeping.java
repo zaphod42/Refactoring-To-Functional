@@ -3,6 +3,8 @@ package org.bgprocess.refactoringtofunctional.handson.stockkeeping;
 import java.util.Deque;
 import java.util.List;
 
+import org.bgprocess.refactoringtofunctional.handson.StockChange;
+
 import com.google.common.collect.Lists;
 
 public class StockKeeping {
@@ -16,7 +18,7 @@ public class StockKeeping {
         Deque<StockChange> increases = Lists.newLinkedList();
         List<StockChange> decreases = Lists.newArrayList();
         for (StockChange change : changes) {
-            if (change.amount >= 0) {
+            if (change.amount() >= 0) {
                 increases.add(change);
             } else {
                 decreases.add(change);
@@ -24,12 +26,12 @@ public class StockKeeping {
         }
         
         for (StockChange decrease : decreases) {
-            int amountRemaining = decrease.amount;
+            int amountRemaining = decrease.amount();
             while (amountRemaining < 0) {
                 StockChange increase = increases.pop();
-                amountRemaining += increase.amount;
+                amountRemaining += increase.amount();
                 if (amountRemaining > 0) {
-                    increases.offerFirst(StockChange.changeOf(amountRemaining, increase.price));
+                    increases.offerFirst(StockChange.of(amountRemaining, increase.price()));
                 }
             }
         }
@@ -37,34 +39,14 @@ public class StockKeeping {
         int totalCost = 0;
         int numberRemaining = itemCount;
         for (StockChange change : increases) {
-            if (numberRemaining > change.amount) { 
-                totalCost += change.price * change.amount;
-                numberRemaining -= change.amount;
+            if (numberRemaining > change.amount()) { 
+                totalCost += change.price() * change.amount();
+                numberRemaining -= change.amount();
             } else {
-                totalCost += change.price * numberRemaining;
+                totalCost += change.price() * numberRemaining;
                 break;
             }
         }
         return totalCost;
-    }
-    
-
-    public static class StockChange {
-        private int amount;
-        private int price;
-        
-        private StockChange(int amount, int price) {
-            this.amount = amount;
-            this.price = price;
-        }
-        
-        public static StockChange changeOf(int amount, int price) {
-            return new StockChange(amount, price);
-        }
-        
-        @Override
-        public String toString() {
-            return String.format("(%d @ %d)", amount, price);
-        }
     }
 }

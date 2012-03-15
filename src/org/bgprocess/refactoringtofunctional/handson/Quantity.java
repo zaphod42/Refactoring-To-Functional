@@ -1,8 +1,8 @@
-package org.bgprocess.refactoringtofunctional.handson.orderimport;
+package org.bgprocess.refactoringtofunctional.handson;
 
 public class Quantity extends Equalable<Quantity> {
 
-    private final int number;
+    public final int number;
 
     private Quantity(int number) {
         this.number = number;

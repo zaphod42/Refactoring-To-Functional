@@ -1,4 +1,4 @@
-package org.bgprocess.refactoringtofunctional.handson.orderimport;
+package org.bgprocess.refactoringtofunctional.handson;
 
 public class Product extends Equalable<Product> {
     private final String name;

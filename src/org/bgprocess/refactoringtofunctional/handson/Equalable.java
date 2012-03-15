@@ -1,4 +1,4 @@
-package org.bgprocess.refactoringtofunctional.handson.orderimport;
+package org.bgprocess.refactoringtofunctional.handson;
 
 import java.util.Arrays;
 

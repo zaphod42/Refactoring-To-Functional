@@ -1,8 +1,8 @@
-package org.bgprocess.refactoringtofunctional.handson.orderimport;
+package org.bgprocess.refactoringtofunctional.handson;
 
 public class Price extends Equalable<Price> {
 
-    private final double price;
+    public final double price;
 
     private Price(double price) {
         this.price = price;

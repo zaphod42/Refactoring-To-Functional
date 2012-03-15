@@ -2,6 +2,10 @@ package org.bgprocess.refactoringtofunctional.handson.orderimport;
 
 import static org.junit.Assert.assertEquals;
 
+import org.bgprocess.refactoringtofunctional.handson.Order;
+import org.bgprocess.refactoringtofunctional.handson.Price;
+import org.bgprocess.refactoringtofunctional.handson.Product;
+import org.bgprocess.refactoringtofunctional.handson.Quantity;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -34,7 +38,7 @@ public class OrderImportTest {
             never(book);
         }});
         
-        assertSuccessfullyImports("");
+        assertSuccessfullyImports(AFile.empty());
     }
     
     @Test public void
@@ -43,7 +47,7 @@ public class OrderImportTest {
             oneOf(book).record(new Order(CHAIN, Quantity.of(2), Price.of(2.2)));
         }});
         
-        assertSuccessfullyImports("Chain,2,2.2");
+        assertSuccessfullyImports(AFile.containing("Chain,2,2.2"));
     }
     
     @Test public void
@@ -54,7 +58,7 @@ public class OrderImportTest {
             oneOf(book).record(new Order(FRAME, Quantity.of(2), Price.of(2500.0)));
         }});
         
-        assertSuccessfullyImports("Chain,2,2.2\nWheel,4,50\nFrame,2,2500");
+        assertSuccessfullyImports(AFile.containing("Chain,2,2.2").line("Wheel,4,50").line("Frame,2,2500"));
     }
     
     @Test public void
@@ -63,7 +67,7 @@ public class OrderImportTest {
             allowing(book).record(with(any(Order.class)));
         }});
         
-        assertSuccessfullyImports("Chain,2,2.2\n\n");
+        assertSuccessfullyImports(AFile.containing("Chain,2,2.2").line("").line(""));
     }
     
     @Test public void
@@ -72,7 +76,7 @@ public class OrderImportTest {
             allowing(book).record(with(any(Order.class)));
         }});
         
-        assertSuccessfullyImports("\n\nChain,2,2.2");
+        assertSuccessfullyImports(AFile.containing("").line("").line("Chain,2,2.2"));
     }
     
     @Test public void
@@ -81,7 +85,7 @@ public class OrderImportTest {
             never(book);
         }});
         
-        assertImportsWithError("Chain,2,2.2\nChain,Two,5.0\nFrame,1,2500");
+        assertImportsWithError(AFile.containing("Chain,2,2.2").line("Chain,Two,5.0").line("Frame,1,2500"));
     }
     
     @Test public void
@@ -90,7 +94,7 @@ public class OrderImportTest {
             never(book);
         }});
         
-        assertImportsWithError("Chain,2,2.2\nChain,2,Five\nFrame,1,2500");
+        assertImportsWithError(AFile.containing("Chain,2,2.2").line("Chain,2,Five").line("Frame,1,2500"));
     }
     
     @Test public void
@@ -100,14 +104,33 @@ public class OrderImportTest {
             never(book);
         }});
         
-        assertImportsWithError("Chain,2,2.2\nAnUnknownProduct,2,5.0\nFrame,1,2500");
+        assertImportsWithError(AFile.containing("Chain,2,2.2").line("AnUnknownProduct,2,5.0").line("Frame,1,2500"));
     }
 
-    private void assertImportsWithError(String input) {
-        assertEquals(Result.ERROR, orderImport.importFrom(input));
+    private void assertImportsWithError(AFile input) {
+        assertEquals(Result.ERROR, orderImport.importFrom(input.lines));
     }
 
-    private void assertSuccessfullyImports(String input) {
-        assertEquals(Result.SUCCESS, orderImport.importFrom(input));
+    private void assertSuccessfullyImports(AFile input) {
+        assertEquals(Result.SUCCESS, orderImport.importFrom(input.lines));
+    }
+    
+    private static class AFile {
+        private final String lines;
+        public AFile(String lines) {
+            this.lines = lines;
+        }
+
+        public static AFile containing(String firstLine) {
+            return new AFile(firstLine);
+        }
+        
+        public static AFile empty() {
+            return containing("");
+        }
+        
+        public AFile line(String text) {
+            return new AFile(lines + (lines.isEmpty() ? "" : "\n") + text);
+        }
     }
 }

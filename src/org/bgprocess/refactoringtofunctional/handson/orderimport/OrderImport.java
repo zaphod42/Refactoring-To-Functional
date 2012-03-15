@@ -2,6 +2,11 @@ package org.bgprocess.refactoringtofunctional.handson.orderimport;
 
 import java.util.List;
 
+import org.bgprocess.refactoringtofunctional.handson.Order;
+import org.bgprocess.refactoringtofunctional.handson.Price;
+import org.bgprocess.refactoringtofunctional.handson.Product;
+import org.bgprocess.refactoringtofunctional.handson.Quantity;
+
 import com.google.common.collect.Lists;
 
 public class OrderImport {
@@ -15,7 +20,6 @@ public class OrderImport {
 
     public Result importFrom(String input) {
         List<OrderRecord> records = Lists.newArrayList();
-        List<Order> orders = Lists.newArrayList();
         for (String line : input.split("\n")) {
             if (!line.isEmpty()) {
                 OrderRecord record = parseToRecord(line);
@@ -23,6 +27,7 @@ public class OrderImport {
             }
         }
         
+        List<Order> orders = Lists.newArrayList();
         for (OrderRecord record : records) {
             if (record.isValid(catalog)) {
                 orders.add(record.toOrder());
