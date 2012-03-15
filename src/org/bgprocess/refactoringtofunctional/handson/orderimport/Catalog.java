@@ -4,6 +4,6 @@ import org.bgprocess.refactoringtofunctional.handson.Product;
 
 public interface Catalog {
 
-    boolean exists(Product of);
+    boolean exists(Product product);
 
 }
